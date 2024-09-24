@@ -1,11 +1,11 @@
 import type { Config } from "tailwindcss";
 import { createThemes } from "tw-colors";
-import colors from "tailwindcss/colors"
+import colors from "tailwindcss/colors";
 
 const baseColors = [
   "gray",
   "red",
-  "yello",
+  "yellow",
   "green",
   "blue",
   "indigo",
@@ -27,16 +27,16 @@ const shadeMapping = {
 };
 
 const generateThemeObject = (colors: any, mapping: any, invert = false) => {
-  const theme:any = {};
+  const theme: any = {};
   baseColors.forEach((color) => {
     theme[color] = {};
-    Object.entries(mapping).forEach(([key, value]:any) => {
+    Object.entries(mapping).forEach(([key, value]: any) => {
       const shadeKey = invert ? value : key;
       theme[color][key] = colors[color][shadeKey];
     });
   });
   return theme;
-}
+};
 
 const lightTheme = generateThemeObject(colors, shadeMapping);
 const darkTheme = generateThemeObject(colors, shadeMapping, true);
@@ -44,15 +44,14 @@ const darkTheme = generateThemeObject(colors, shadeMapping, true);
 const themes = {
   light: {
     ...lightTheme,
-    white: "#ffffff"
+    white: "#ffffff",
   },
   dark: {
     ...darkTheme,
     white: colors.gray["950"],
-    black: colors.gray["50"]
-  }
-}
-
+    black: colors.gray["50"],
+  },
+};
 
 const config: Config = {
   darkMode: "class",
