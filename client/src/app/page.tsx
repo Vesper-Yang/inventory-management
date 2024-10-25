@@ -1,9 +1,7 @@
-import Image from "next/image";
+// 后台管理系统的固定布局：Navbar和Sidebar，以及正文部分
+
+import Dashboard from "@/app/dashboard/page";
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center jusify-between p-24">
-      hello
-    </main>
-  );
+  return <Dashboard />;
 }

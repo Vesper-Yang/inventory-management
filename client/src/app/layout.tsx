@@ -1,6 +1,9 @@
+// 界面都包装在DashboardWrapper里，笔记详情见dashboardWrapper and layout.md
+
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import DashboardWrapper from "@/app/dashboardWrapper";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <DashboardWrapper>{children}</DashboardWrapper>
       </body>
     </html>
   );
