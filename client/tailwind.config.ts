@@ -45,7 +45,6 @@ const generateThemeObject = (colors: any, mapping: any, invert = false) => {
 const lightTheme = generateThemeObject(colors, shadeMapping);
 const darkTheme = generateThemeObject(colors, shadeMapping, true);
 
-
 // 5. 存储浅色和深色主题
 const themes = {
   light: {
@@ -54,11 +53,10 @@ const themes = {
   },
   dark: {
     ...darkTheme,
-    white: colors.gray["950"],
-    black: colors.gray["50"],
+    white: colors.gray["950"], // 几乎是黑色 '#030712'
+    black: colors.gray["50"], // 几乎是黑色 '#f9fafb' tailwind的颜色对象
   },
 };
-
 
 const config: Config = {
   darkMode: "class", // 在CSS中输入dark来启用深色主题
@@ -76,7 +74,6 @@ const config: Config = {
     },
   },
   plugins: [createThemes(themes)], //插件用来扩展 Tailwind 的功能或添加自定义功能，一旦注册了这个插件，Tailwind 就知道在构建样式时要使用这个插件。
-
 };
 
 export default config;

@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+// schema.prisma 文件是整个数据库的"设计图纸"，它定义了数据库的结构
+// 此处的数据库类型是教程里drawSQL的部分，那个文件展现了数据库设计思路
+model Users {
+  userId String @id
+  name   String
+  email  String
+}
+
+// model 就像是数据库中的表
+// @id 表示主键
+// ? 可选参数，表示可以为空
+// @relation 定义表之间的关系
+model Products {
+  productId     String      @id    // 产品ID，主键
+  name          String
+  price         Float
+  rating        Float?             // 评分（可选，问号表示可以为空）
+  stockQuantity Int
+  Sales         Sales[]            // 关联的销售记录
+  Purchases     Purchases[]        // 关联的采购记录
+}
+
+// 销售记录
+model Sales {
+  saleId      String   @id
+  productId   String               // 外键，关联到 Products
+  timestamp   DateTime
+  quantity    Int
+  unitPrice   Float
+  totalAmount Float
+  product     Products @relation(fields: [productId], references: [productId])                     // Sales表通过productId 关联到Products表
+}
+
+// 采购记录
+model Purchases {
+  purchaseId String   @id
+  productId  String                // 外键，关联到 Products
+  timestamp  DateTime
+  quantity   Int
+  unitCost   Float
+  totalCost  Float
+  product    Products @relation(fields: [productId], references: [productId])                    // Sales表通过productId 关联到Products表
+}
+
+// 支出
+model Expenses {
+  expenseId String   @id
+  category  String
+  amount    Float
+  timestamp DateTime
+}
+
+// 销售总结
+model SalesSummary {
+  salesSummaryId   String   @id
+  totalValue       Float
+  changePercentage Float?
+  date             DateTime
+}
+
+// 采购总结
+model PurchaseSummary {
+  purchaseSummaryId String   @id
+  totalPurchased    Float
+  changePercentage  Float?
+  date              DateTime
+}
+
+// 支出总结
+model ExpenseSummary {
+  expenseSummaryId  String              @id
+  totalExpenses     Float
+  date              DateTime
+  ExpenseByCategory ExpenseByCategory[]      // 关联的支出按类别统计
+}
+
+// 支出按类别
+model ExpenseByCategory {
+  expenseByCategoryId String         @id
+  expenseSummaryId    String                // 外键，关联到 ExpenseSummary
+  category            String
+  amount              BigInt
+  date                DateTime
+  expenseSummary      ExpenseSummary @relation(fields: [expenseSummaryId], references: [expenseSummaryId])
+}
