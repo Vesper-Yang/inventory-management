@@ -8,6 +8,7 @@ import morgan from "morgan";
 
 /* ROUTE IMPORTS */
 import dashboardRoutes from "./Routes/ dashboardRoutes";
+import productRoutes from "./Routes/productRoutes";
 
 /* CONFIGURATIONS */
 // 配置环境变量
@@ -29,6 +30,7 @@ app.use(cors()); // 允许跨域
 // 定义路由
 // 告诉服务器：当有人访问 /dashboard 时，使用 dashboardRoutes 处理
 app.use("/dashboard", dashboardRoutes); // http://localhost:8000/dashboard
+app.use("/products", productRoutes); // http://localhost:8000/products
 
 /* SERVER */
 // 启动服务器, port是后端服务器的端口, 在.env里指定的PORT=8000

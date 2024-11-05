@@ -2,9 +2,16 @@
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// 这些接口定义是在描述从后端接收的数据结构
+// 这些接口定义是在描述从后端接收的数据结构(endpoints里的)
 export interface Product {
   productId: string;
+  name: string;
+  price: number;
+  rating?: number;
+  stockQuantity: number;
+}
+
+export interface NewProduct {
   name: string;
   price: number;
   rating?: number;
@@ -49,18 +56,37 @@ export interface DashboardMetrics {
 export const api = createApi({
   // 设置基础URL，指向后端服务器，对应.env.local http://localhost:8000
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
-  // 这个名字会在 redux.tsx 中用到，redux持久化存储它的状态
+  // 指定 Redux store 中的 slice 名称, 这个名字会在 redux.tsx 中用到，redux持久化存储它的状态
   reducerPath: "api",
-  // 用于缓存管理的标签
-  tagTypes: ["DashboardMetrics"],
+  // API 中可能会使用的标签,标签用于管理缓存和数据更新。
+  tagTypes: ["DashboardMetrics", "Products"],
   // 具体的API调用
   endpoints: (build) => ({
     getDashboardMetrics: build.query<DashboardMetrics, void>({
       query: () => "/dashboard",
       providesTags: ["DashboardMetrics"],
     }),
+    getProducts: build.query<Product[], string | void>({
+      query: (search) => ({
+        url: "/products",
+        params: search ? { search } : {},
+      }),
+      providesTags: ["Products"],
+    }),
+    createProduct: build.mutation<Product, NewProduct>({
+      query: (newProduct) => ({
+        url: "/products",
+        method: "POST",
+        body: newProduct,
+      }),
+      invalidatesTags: ["Products"],
+    }),
   }),
 });
 
 // 自动生成的hooks
-export const { useGetDashboardMetricsQuery } = api;
+export const {
+  useGetDashboardMetricsQuery,
+  useGetProductsQuery,
+  useCreateProductMutation,
+} = api;
