@@ -12,6 +12,7 @@ const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
 /* ROUTE IMPORTS */
 const _dashboardRoutes_1 = __importDefault(require("./Routes/ dashboardRoutes"));
+const productRoutes_1 = __importDefault(require("./Routes/productRoutes"));
 /* CONFIGURATIONS */
 // 配置环境变量
 dotenv_1.default.config();
@@ -29,6 +30,7 @@ app.use((0, cors_1.default)()); // 允许跨域
 // 定义路由
 // 告诉服务器：当有人访问 /dashboard 时，使用 dashboardRoutes 处理
 app.use("/dashboard", _dashboardRoutes_1.default); // http://localhost:8000/dashboard
+app.use("/products", productRoutes_1.default); // http://localhost:8000/products
 /* SERVER */
 // 启动服务器, port是后端服务器的端口, 在.env里指定的PORT=8000
 const port = Number(process.env.PORT) || 3001;

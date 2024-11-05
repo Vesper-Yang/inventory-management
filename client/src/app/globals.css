@@ -20,3 +20,16 @@ body,
   @apply bg-gray-500;
   @apply text-gray-900;
 }
+
+/* Tailwind CSS 中的响应式断点：默认: 0-767px (手机屏幕)  |  md: 768px-1279px (平板/小屏电脑)  |  xl: 1280px及以上 (大屏电脑) */
+@media (min-width: 768px) {
+  .custom-grid-rows {
+    grid-template-rows: repeat(8, 20vh);
+  }
+}
+
+@media (min-width: 1280px) {
+  .custom-grid-rows {
+    grid-template-rows: repeat(8, 7.5vh);
+  }
+}
