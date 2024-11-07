@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { createProduct, getProducts } from "../controllers/productController";
+import {
+  createProduct,
+  deleteProduct,
+  getProducts,
+} from "../controllers/productController";
 
 // 创建路由器
 const router = Router();
@@ -8,5 +12,7 @@ const router = Router();
 router.get("/", getProducts);
 // 当创建新产品时，调用 createProduct 函数
 router.post("/", createProduct);
+// 当删除产品时，调用 deleteProduct 函数
+router.delete("/", deleteProduct);
 
 export default router;

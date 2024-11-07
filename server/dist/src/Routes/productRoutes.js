@@ -8,4 +8,6 @@ const router = (0, express_1.Router)();
 router.get("/", productController_1.getProducts);
 // 当创建新产品时，调用 createProduct 函数
 router.post("/", productController_1.createProduct);
+// 当删除产品时，调用 deleteProduct 函数
+router.delete("/", productController_1.deleteProduct);
 exports.default = router;

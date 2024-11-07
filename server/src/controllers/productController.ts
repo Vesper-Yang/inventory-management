@@ -42,3 +42,25 @@ export const createProduct = async (
     res.status(500).json({ message: "Error creating products" });
   }
 };
+
+export const deleteProduct = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    // 从查询参数中获取productId
+    const { id } = req.query;
+    if (!id) {
+      res.status(400).json({ message: "Product ID is required" });
+      return;
+    }
+    await prisma.products.delete({
+      where: {
+        productId: id.toString(),
+      },
+    });
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting product" });
+  }
+};

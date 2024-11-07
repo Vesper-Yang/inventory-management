@@ -81,6 +81,15 @@ export const api = createApi({
       }),
       invalidatesTags: ["Products"],
     }),
+    deleteProduct: build.mutation<void, string>({
+      query: (productId) => ({
+        url: "/products",
+        method: "DELETE",
+        // 这会生成 /products?id=xxx 的URL
+        params: { id: productId },
+      }),
+      invalidatesTags: ["Products"],
+    }),
   }),
 });
 
@@ -89,4 +98,5 @@ export const {
   useGetDashboardMetricsQuery,
   useGetProductsQuery,
   useCreateProductMutation,
+  useDeleteProductMutation,
 } = api;

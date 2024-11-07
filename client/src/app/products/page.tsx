@@ -1,7 +1,11 @@
 "use client";
 
 import Header from "@/app/(components)/Header";
-import { useCreateProductMutation, useGetProductsQuery } from "@/state/api";
+import {
+  useCreateProductMutation,
+  useDeleteProductMutation,
+  useGetProductsQuery,
+} from "@/state/api";
 import { PlusCircleIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 import Rating from "../(components)/Rating";
@@ -30,6 +34,20 @@ const Products = () => {
   // 点击 Create 创建按钮触发的
   const handleCreateProduct = async (productData: ProductFormData) => {
     await createProduct(productData);
+  };
+
+  // 删除产品
+  const [deleteProduct] = useDeleteProductMutation();
+
+  // 删除处理的函数
+  const handleDeleteProduct = async (productId: string) => {
+    try {
+      if (window.confirm("Are you sure you want to delete this product?")) {
+        await deleteProduct(productId);
+      }
+    } catch (error) {
+      console.error("删除产品时出错:", error);
+    }
   };
 
   if (isLoading) {
@@ -95,6 +113,20 @@ const Products = () => {
                     <Rating rating={product.rating} />
                   </div>
                 )}
+              </div>
+              <div className="flex gap-3 flex-row items-center justify-center">
+                <button
+                  className="mt-4 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={() => {}}
+                >
+                  Edit
+                </button>
+                <button
+                  className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={() => handleDeleteProduct(product.productId)}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))
