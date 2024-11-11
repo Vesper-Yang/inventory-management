@@ -10,6 +10,7 @@ import { PlusCircleIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 import Rating from "../(components)/Rating";
 import CreateProductModal from "./CreateProductModal";
+import { UpdateProductModal } from "./UpdateProductModal";
 
 type ProductFormData = {
   name: string;
@@ -18,15 +19,24 @@ type ProductFormData = {
   rating: number;
 };
 
+type Product = {
+  productId: string;
+  name: string;
+  price: number;
+  stockQuantity: number;
+  rating?: number;
+};
+
 const Products = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     data: products,
     isError,
     isLoading,
   } = useGetProductsQuery(searchTerm);
+
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // 创建产品（添加一个新产品，api.ts）
   const [createProduct] = useCreateProductMutation();
@@ -48,6 +58,14 @@ const Products = () => {
     } catch (error) {
       console.error("删除产品时出错:", error);
     }
+  };
+
+  const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  const handleUpdateProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setIsUpdateFormOpen(true);
   };
 
   if (isLoading) {
@@ -82,7 +100,7 @@ const Products = () => {
         <Header name="Products" />
         <button
           className="flex items-center bg-blue-500 hover:bg-blue-700 text-gray-200 font-bold py-2 px-4 rounded"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => setIsCreateModalOpen(true)}
         >
           <PlusCircleIcon className="w-5 h-5 mr-2 !text-gray-200" /> Create
           Product
@@ -117,7 +135,7 @@ const Products = () => {
               <div className="flex gap-3 flex-row items-center justify-center">
                 <button
                   className="mt-4 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={() => {}}
+                  onClick={() => handleUpdateProduct(product)}
                 >
                   Edit
                 </button>
@@ -135,10 +153,21 @@ const Products = () => {
 
       {/* MODAL：需要在主界面是因为它是从主界面弹出来的，但具体的表单内容分离到单独组件 */}
       <CreateProductModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
         onCreate={handleCreateProduct}
       />
+
+      {isUpdateFormOpen && selectedProduct && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg">
+            <UpdateProductModal
+              product={selectedProduct}
+              onClose={() => setIsUpdateFormOpen(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

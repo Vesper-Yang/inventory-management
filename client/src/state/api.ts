@@ -90,6 +90,17 @@ export const api = createApi({
       }),
       invalidatesTags: ["Products"],
     }),
+    updateProduct: build.mutation<void, { id: string; data: Partial<Product> }>(
+      {
+        query: ({ id, data }) => ({
+          url: "/products",
+          method: "PUT",
+          params: { id },
+          body: data,
+        }),
+        invalidatesTags: ["Products"],
+      }
+    ),
   }),
 });
 
@@ -99,4 +110,5 @@ export const {
   useGetProductsQuery,
   useCreateProductMutation,
   useDeleteProductMutation,
+  useUpdateProductMutation,
 } = api;

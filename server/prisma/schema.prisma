@@ -32,6 +32,7 @@ model Products {
   price         Float
   rating        Float?             // 评分（可选，问号表示可以为空）
   stockQuantity Int
+  createdAt      DateTime @default(now())  // createdAt 字段会在创建记录时自动设置为当前时间@default(now())
   Sales         Sales[]            // 关联的销售记录
   Purchases     Purchases[]        // 关联的采购记录
 }

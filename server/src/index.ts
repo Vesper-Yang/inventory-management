@@ -7,8 +7,8 @@ import helmet from "helmet";
 import morgan from "morgan";
 
 /* ROUTE IMPORTS */
-import dashboardRoutes from "./Routes/ dashboardRoutes";
-import productRoutes from "./Routes/productRoutes";
+import dashboardRoutes from "./routes/dashboardRoutes";
+import productRoutes from "./routes/productRoutes";
 
 /* CONFIGURATIONS */
 // 配置环境变量
@@ -27,8 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false })); // 解析URL编码
 app.use(cors()); // 允许跨域
 
 /* ROUTES */
-// 定义路由
-// 告诉服务器：当有人访问 /dashboard 时，使用 dashboardRoutes 处理
+// 定义路由, 告诉服务器：当访问 /dashboard 时, 使用 dashboardRoutes 处理
 app.use("/dashboard", dashboardRoutes); // http://localhost:8000/dashboard
 app.use("/products", productRoutes); // http://localhost:8000/products
 

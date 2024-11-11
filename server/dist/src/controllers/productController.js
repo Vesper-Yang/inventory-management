@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.createProduct = exports.getProducts = void 0;
+exports.updateProduct = exports.deleteProduct = exports.createProduct = exports.getProducts = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -22,6 +22,7 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                     contains: search,
                 },
             },
+            orderBy: { createdAt: "desc" }, // 改为降序，最新创建的在列表最前面,
         });
         res.json(products);
     }
@@ -51,7 +52,7 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.createProduct = createProduct;
 const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // 从查询参数中获取productId
+        // 从前端api.ts的params查询参数获取产品ID
         const { id } = req.query;
         if (!id) {
             res.status(400).json({ message: "Product ID is required" });
@@ -69,3 +70,29 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.deleteProduct = deleteProduct;
+const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.query; // 从前端api.ts的params查询参数获取产品ID
+        const { name, price, rating, stockQuantity } = req.body; // 从请求体获取更新数据
+        if (!id) {
+            res.status(400).json({ message: "Product ID is required" });
+            return;
+        }
+        const updatedProduct = yield prisma.products.update({
+            where: {
+                productId: id.toString(),
+            },
+            data: {
+                name,
+                price,
+                rating,
+                stockQuantity,
+            },
+        });
+        res.status(200).json(updatedProduct);
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error updating product" });
+    }
+});
+exports.updateProduct = updateProduct;
