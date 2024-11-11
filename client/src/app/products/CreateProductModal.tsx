@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { v4 } from "uuid";
 import Header from "@/app/(components)/Header";
 
@@ -27,6 +27,19 @@ const CreateProductModal = ({
     stockQuantity: 0,
     rating: 0,
   });
+
+  // 当弹窗打开时重置表单
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({
+        productId: v4(),
+        name: "",
+        price: 0,
+        stockQuantity: 0,
+        rating: 0,
+      });
+    }
+  }, [isOpen]);
 
   // 处理输入框的变化（setFormData更新formData的值）
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
